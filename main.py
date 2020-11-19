@@ -9,11 +9,11 @@ if __name__ == '__main__':
 
     # Examples:
     tempo = 60 # beats per minute
-    spb = 60/tempo
+    spb = 60/tempo # seconds per beat
     notes = ["E","D","C","D","E","E","E","D","D","D","E","G","G",
-             "E","D","C","D","E","E","E","D","E","E","E","D","C"]
-    durations = [.25,.25,.25,.25,.25,.25,.5,.25,.25,.5,.25,.25,.5,
-                 .25,.25,.25,.25,.25,.25,.25,.25,.25,.25,.25,1]
+             "E","D","C","D","E","E","E","E","D","D","E","D","C"]
+    durations = [.25,.25,.25,.25,.25,.25, .5,.25,.25, .5,.25,.25,.5,
+                 .25,.25,.25,.25,.25,.25,.25,.25,.25,.25,.25,.25, 1] #note lengths in beats
     for i in range(len(notes)):
         player.play_note(notes[i],spb*durations[i])
 
