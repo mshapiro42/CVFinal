@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 def clefFind(img):
-    tempT = cv2.imread('Treble.png')
+    tempT = cv2.imread('Treble2.png')
     tempT = cv2.cvtColor(tempT, cv2.COLOR_BGR2GRAY)
     _, tempT = cv2.threshold(tempT, 200, 255, cv2.THRESH_BINARY_INV)
 
@@ -15,9 +15,9 @@ def clefFind(img):
     bassFind = cv2.matchTemplate(img,tempB,cv2.TM_CCOEFF_NORMED)
     hitB = np.amax(bassFind)
 
-    if hitT > 0.85:
+    if hitT > 0.7:
         return "Treble"
-    elif hitB > 0.85:
+    elif hitB > 0.7:
         return "Bass"
     else:
         return "Clef Not Found"

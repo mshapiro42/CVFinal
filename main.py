@@ -17,9 +17,18 @@ def playHardCoded():
     for i in range(len(notes)):
         player.play_note(notes[i], spb * durations[i])
 
+def createTemplate():
+    bgr = cv2.imread('mySimpleSong1.jpg')
+    gray_img = cv2.cvtColor(bgr,cv2.COLOR_BGR2GRAY)
+    gray_img = gray_img[33:-1,15:60]
+    cv2.imshow("Gray",gray_img)
+    cv2.waitKey()
+    cv2.imwrite("Treble2.png",gray_img)
+
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-        playHardCoded()
+    #playHardCoded()
+    createTemplate()
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/

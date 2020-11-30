@@ -3,7 +3,7 @@ import numpy as np
 import math
 from clefFind import *
 
-img = cv2.imread('Tm1.png')
+img = cv2.imread('mySimpleSong3.jpg')
 
 imgGr = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
 image_width = img.shape[1]
