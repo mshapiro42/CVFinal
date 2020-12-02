@@ -3,24 +3,19 @@ import numpy as np
 import math
 from clefFind import *
 
-eighth1 = cv2.imread("eighth.jpg")
-eighth2 = cv2.imread("eighth2.jpg")
-quarter = cv2.imread("quarter.jpg")
-half = cv2.imread("half.jpg")
-notes = [eighth1,eighth2,quarter,half]
-duration = np.array([.125,.125,.25,.5])
-colors = [(255,0,255),(255,0,0),(0,255,0),(0,255,255)]
-for n in range(len(notes)):
-    tempT = notes[n]
-    tempT = cv2.cvtColor(tempT, cv2.COLOR_BGR2GRAY)
-    _, tempT = cv2.threshold(tempT, 200, 255, cv2.THRESH_BINARY)
-    notes[n] = tempT
+
+def createThreshTemp(img, inv):
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    if inv:
+        _, img = cv2.threshold(img, 200, 255, cv2.THRESH_BINARY_INV)
+    else:
+        _, img = cv2.threshold(img, 200, 255, cv2.THRESH_BINARY)
+    return img
 
 
 def isTimeSig(img):
     fourfour = cv2.imread("fourfour.jpg")
-    fourfour = cv2.cvtColor(fourfour, cv2.COLOR_BGR2GRAY)
-    _, fourfour = cv2.threshold(fourfour, 200, 255, cv2.THRESH_BINARY_INV)
+    fourfour = createThreshTemp(fourfour,True)
     #cv2.imshow("Object",img)
     #img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     if(img.shape[0]>=fourfour.shape[0] and img.shape[1]>-fourfour.shape[1]):
@@ -35,13 +30,11 @@ def findKey(img):
     #cv2.imshow("Sig",img)
     #cv2.waitKey()
     tempF = cv2.imread('flat.jpg')
-    tempF = cv2.cvtColor(tempF, cv2.COLOR_BGR2GRAY)
-    _, tempF = cv2.threshold(tempF, 200, 255, cv2.THRESH_BINARY_INV)
+    tempF = createThreshTemp(tempF, True)
     #cv2.imshow("Flat template",tempF)
 
     tempS = cv2.imread('sharp.jpg')
-    tempS = cv2.cvtColor(tempS, cv2.COLOR_BGR2GRAY)
-    _, tempS = cv2.threshold(tempS, 200, 255, cv2.THRESH_BINARY_INV)
+    tempS = createThreshTemp(tempS, True)
     #cv2.imshow("Sharp template",tempS)
 
     flatFind = cv2.matchTemplate(img,tempF,cv2.TM_CCOEFF_NORMED)
@@ -64,20 +57,31 @@ def findKey(img):
 
 
 def findBestMatch(note):
-    cv2.imshow("Note",note)
-    #cv2.waitKey(30)
     best = -1
-    max = .3
-    for i in range(len(notes)):
-        noteFind = cv2.matchTemplate(note, notes[i], cv2.TM_CCOEFF_NORMED)
-        hitN = np.amax(noteFind)
-        if hitN>max:
-            max = hitN
-            best = i
+    m = .3
+    hits = np.zeros(6)
+    cv2.imshow("Note",note)
+    cv2.waitKey(30)
+    hits[0] = np.amax(cv2.matchTemplate(note, eighth1, cv2.TM_CCOEFF_NORMED))
+    hits[1] = np.amax(cv2.matchTemplate(note, eighth2, cv2.TM_CCOEFF_NORMED))
+    hits[2] = np.amax(cv2.matchTemplate(note, quarter1, cv2.TM_CCOEFF_NORMED))
+    hits[3] = np.amax(cv2.matchTemplate(note, quarter2, cv2.TM_CCOEFF_NORMED))
+    hits[4] = np.amax(cv2.matchTemplate(note, half1, cv2.TM_CCOEFF_NORMED))
+    hits[5] = np.amax(cv2.matchTemplate(note, half2, cv2.TM_CCOEFF_NORMED))
+
+    print(hits)
+    i = np.argmax(hits)
+    highest = hits[i]
+    if highest>m:
+        best = i
     if best==-1:
         return 0
     elif (best==0 or best==1):
         return 1
+    elif (best==2 or best==3):
+        return 2
+    elif (best==4 or best==5):
+        return 3
     else:
         return best
 
@@ -133,13 +137,14 @@ def notesTest(img_name):
     # cv2.waitKey()
     song_durations = []
     _, notes = cv2.threshold(lineOut,200,255,cv2.THRESH_BINARY_INV)
-    cv2.imshow('Inv', notes)
+    # cv2.imshow('Inv', notes)
     # cv2.waitKey()
 
     num_labels_black, labels_img_black, stats_black, centroids_black = cv2.connectedComponentsWithStats(cv2.bitwise_not(notes))
     staff_tol = 25
     objects = []
-    for stat in stats_black:
+    centers = []
+    for i, stat in enumerate(stats_black):
         x0 = stat[cv2.CC_STAT_LEFT]
         y0 = stat[cv2.CC_STAT_TOP]
         x1 = x0 + stat[cv2.CC_STAT_WIDTH]
@@ -148,24 +153,46 @@ def notesTest(img_name):
             # match = findBestMatch(notes[y0:y1,x0:x1])
             # print(match)
             objects.append([x0,y0,x1,y1])
+            centers.append((round(centroids_black[i,0]),round(centroids_black[i,1])))
         # else:
         #     cv2.rectangle(img, (x0, y0), (x1, y1), (255, 0, 255))
     objects = sorted(objects)
-    del objects[0] # Leftmost object is the clef
-    del objects[len(objects)-1] # rightmost object is the double end bar
+    del objects[0], centers[0] # Leftmost object is the clef
+    del objects[len(objects)-1], centers[len(centers)-1] # rightmost object is the double end bar
     o = objects[0]
     if isTimeSig(np.copy(imgGr[o[1]:o[3], o[0]:o[2]])):
-        del objects[0]
+        del objects[0], centers[0]
         num,key = 0, "natural"
     else:
         num,key = findKey(np.copy(imgGr[o[1]:o[3], o[0]-5:o[2]+5]))
-        del objects[0:2]
+        del objects[0:2], centers[0:2]
     print(num,key)
-    print(objects)
-    for o in objects:
-        cv2.rectangle(img, (o[0], o[1]), (o[2], o[3]), (255, 0, 0))
+    #print(objects)
+    for i, o  in enumerate(objects):
+        c = centers[i]
+        note = np.copy(notes[max(c[1]-40,0):min(c[1]+40,image_height),max(c[0]-25,0):min(c[0]+25,image_width)])
+        type = findBestMatch(note)
+        cv2.rectangle(img, (o[0], o[1]), (o[2], o[3]), colors[type])
     cv2.imshow("Black Connected Components",img)
     cv2.waitKey()
+
+
+eighth1 = cv2.imread("eighth.jpg")
+eighth2 = cv2.imread("eighth2.jpg")
+quarter1 = cv2.imread("quarter.jpg")
+quarter2 = cv2.imread("quarter2.jpg")
+half1 = cv2.imread("half.jpg")
+half2 = cv2.imread("half2.jpg")
+
+eighth1 = createThreshTemp(eighth1, False)
+eighth2 = createThreshTemp(eighth2, False)
+quarter1 = createThreshTemp(quarter1, False)
+quarter2 = createThreshTemp(quarter2, False)
+half1 = createThreshTemp(half1, False)
+half2 = createThreshTemp(half2, False)
+
+duration = np.array([.125, .125, .25, .25, .5, .5])
+colors = [(255, 0, 255), (255, 0, 0), (0, 255, 0), (0, 255, 255)]
 
 if __name__ == '__main__':
     for i in range(1,4):
