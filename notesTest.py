@@ -3,6 +3,7 @@ import numpy as np
 import math
 from clefFind import *
 from Lineout import *
+from keyGet import *
 
 
 def createThreshTemp(img, inv):
@@ -15,12 +16,16 @@ def createThreshTemp(img, inv):
 
 
 def calcStaffInd(lineLocs):
+    lineLocs = np.array(lineLocs)
     diffs = lineLocs[1:5] - lineLocs[0:4]
-    dist = np.mean(lineLocs)
-    indx = np.zeros((11))
-    indx[1:2:-1] = lineLocs
-    indx[0:2:-1] = lineLocs - dist
-    indx[-1] = lineLocs[-1]+dist
+    dist = np.mean(diffs)
+    indx = np.zeros(11)
+    # lineInc = np.arrange(1,11,2)
+    # spaces = np.arrange(0,12,2)
+    # indx[np.arrange(1,12,2)] = lineLocs
+    # indx[np.arrange(0,11,2)] = lineLocs - dist
+    # indx[-1] = lineLocs[-1]+dist
+    return indx
 
 def isTimeSig(img):
     fourfour = cv2.imread("fourfour.jpg")
@@ -59,11 +64,11 @@ def findKey(img):
 
     if hitF > hitS:
         key = "flat"
-        num = numF
+        numS = 0
     else:
         key = "sharp"
-        num = numS
-    return(num,key)
+        numF = 0
+    return(numS, numF)
 
 
 def findBestMatch(note):
@@ -161,6 +166,7 @@ def notesTest(img_name):
 
     lineOut, lineLocs = lineout(imgGr)
 
+    #indx = calcStaffInd(lineLocs)
 
     clef = clefFind(imgGr)
 
@@ -207,11 +213,13 @@ def notesTest(img_name):
     o = objects[0]
     if isTimeSig(np.copy(imgGr[o[1]:o[3], o[0]-5:o[2]+5])):
         del objects[0]
-        num,key = 0, "natural"
+        numS,numF = 0, 0
     else:
-        num,key = findKey(np.copy(imgGr[o[1]:o[3], o[0]-5:o[2]+5]))
+        numS,numF = findKey(np.copy(imgGr[o[1]:o[3], o[0]-5:o[2]+5]))
         del objects[0:2], centers[0:2]
-    print(num,key)
+    print(numS,numF)
+    scale = keyGet(clef,numS,numF)
+    print(scale)
     #print(objects)
     for i, o  in enumerate(objects):
         note = np.copy(imgGr[max(o[5]-40,0):min(o[5]+40,image_height),max(o[4]-22,0):min(o[4]+22,image_width)])
@@ -225,10 +233,10 @@ def notesTest(img_name):
         #print(noteNames[type],stemDir,song_durations[-1])
         cv2.rectangle(img, (o[0], o[1]), (o[2], o[3]), colors[type])
         cv2.imshow("Black Connected Components",img)
-        cv2.waitKey()
+        #cv2.waitKey()
     print(song_durations)
     print(note_positions)
-    #cv2.waitKey()
+    cv2.waitKey()
 
 
 eighth1 = cv2.imread("eighthtail-1.jpg")
