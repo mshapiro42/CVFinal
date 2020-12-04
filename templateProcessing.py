@@ -11,9 +11,9 @@ def get_xy(event, x, y, flags, param):
 
 song = cv2.imread("mySimpleSong3.jpg")
 cv2.imshow("Song",song)
-# loc = []
-# cv2.setMouseCallback("Song", get_xy, loc)
-# cv2.waitKey()
+loc = []
+cv2.setMouseCallback("Song", get_xy, loc)
+cv2.waitKey()
 
 def symbols():
     # flat is ~ 19 pixels high
@@ -69,8 +69,8 @@ def symbols():
     # cv2.imwrite("fourfour.jpg",fourfour)
 
 #eighth note is 70 pixels tall
-eighth = cv2.imread("eighth.jpg")
-scale = 70/eighth.shape[0]
+eighth = cv2.imread("eighth-1.jpg")
+scale = 60/eighth.shape[0]
 width = round(eighth.shape[1] * scale)
 height = round(eighth.shape[0] * scale)
 print(scale)
@@ -78,41 +78,96 @@ eighth = cv2.resize(src=eighth, dsize=(width, height))
 print(eighth.shape)
 # cv2.imshow("Eighth Note",eighth)
 # cv2.waitKey()
-# cv2.imwrite("eighth.jpg",eighth)
+# cv2.imwrite("eighth-1.jpg",eighth)
 
 #eighth note is 70 pixels tall
-eighth2 = cv2.imread("eighth2.jpg")
-scale = 70/eighth2.shape[0]
+eighth2 = cv2.imread("eighth2-1.jpg")
+scale = 60/eighth2.shape[0]
 width = round(eighth2.shape[1] * scale)
 height = round(eighth2.shape[0] * scale)
 print(scale)
-eighth = cv2.resize(src=eighth2, dsize=(width, height))
+eighth2 = cv2.resize(src=eighth2, dsize=(width, height))
 print(eighth2.shape)
 # cv2.imshow("Eighth Note 2",eighth2)
 # cv2.waitKey()
-# cv2.imwrite("eighth2.jpg",eighth2)
+# cv2.imwrite("eighth2-1.jpg",eighth2)
+
+#eighthtail is 43 pixels tall
+eighthtail = cv2.imread("eighthtail.jpg")
+scale = 48/eighthtail.shape[0]
+width = round(eighthtail.shape[1] * scale)
+height = round(eighthtail.shape[0] * scale)
+print(scale)
+eighthtail = cv2.resize(src=eighthtail, dsize=(width, height))
+print(eighthtail.shape)
+cv2.imshow("Eighth Note Tail",eighthtail)
+# cv2.imwrite("eighthtail-1.jpg",eighthtail)
+
+#eighthtail2 is 43 pixels tall
+eighthtail2 = cv2.imread("eighthtail2.jpg")
+scale = 43/eighthtail2.shape[0]
+width = round(eighthtail2.shape[1] * scale)
+height = round(eighthtail2.shape[0] * scale)
+print(scale)
+eighthtail2 = cv2.resize(src=eighthtail2, dsize=(width, height))
+print(eighthtail2.shape)
+cv2.imshow("Eighth Note Tail 2",eighthtail2)
+cv2.waitKey()
+# cv2.imwrite("eighthtail2-1.jpg",eighthtail2)
 
 #quarter note is 70 pixels tall
-quarter = cv2.imread("quarter.jpg")
-scale = 70/quarter.shape[0]
+quarter = cv2.imread("quarter-1.jpg")
+scale = 60/quarter.shape[0]
 width = round(quarter.shape[1] * scale)
 height = round(quarter.shape[0] * scale)
 print(scale)
 quarter = cv2.resize(src=quarter, dsize=(width, height))
 print(quarter.shape)
-cv2.imshow("Quarter Note",quarter)
-# cv2.imwrite("quarter.jpg",quarter)
-# flip quarter template for stem up/down
-quarter2 = cv2.rotate(quarter,cv2.ROTATE_180)
-cv2.imshow("Quarter 2",quarter2)
-# cv2.waitKey()
-# cv2.imwrite("quarter2.jpg",quarter2)
+# cv2.imshow("Quarter Note",quarter)
+# cv2.imwrite("quarter-1.jpg",quarter)
 
+#quarter note is 70 pixels tall
+quarter2 = cv2.imread("quarter2-1.jpg")
+scale = 60/quarter2.shape[0]
+width = round(quarter2.shape[1] * scale)
+height = round(quarter2.shape[0] * scale)
+print(scale)
+quarter2 = cv2.resize(src=quarter2, dsize=(width, height))
+print(quarter2.shape)
+# cv2.imshow("Quarter Note 2",quarter2)
+# cv2.imwrite("quarter2-1.jpg",quarter2)
 
-# flip half template for stem up/down
-half = cv2.imread("half.jpg")
-cv2.imshow("Half Note",half)
-half2 = cv2.rotate(half,cv2.ROTATE_180)
-cv2.imshow("Half 2",half2)
+#half note is 70 pixels tall
+half = cv2.imread("half-1.jpg")
+scale = 60/half.shape[0]
+width = round(half.shape[1] * scale)
+height = round(half.shape[0] * scale)
+print(scale)
+half = cv2.resize(src=half, dsize=(width, height))
+print(half.shape)
+# cv2.imshow("Half Note",half)
+# cv2.imwrite("half-1.jpg",half)
+
+#half note is 70 pixels tall
+half2 = cv2.imread("half2-1.jpg")
+scale = 60/half2.shape[0]
+width = round(half2.shape[1] * scale)
+height = round(half2.shape[0] * scale)
+print(scale)
+half2 = cv2.resize(src=half2, dsize=(width, height))
+print(half2.shape)
+# cv2.imshow("Half Note 2",half2)
 # cv2.waitKey()
-# cv2.imwrite("half2.jpg",half2)
+# cv2.imwrite("half-2.jpg",half2)
+
+#whole note is 20 pixels tall
+whole = cv2.imread("whole.jpg")
+scale = 28/whole.shape[0]
+width = round(whole.shape[1] * scale)
+height = round(whole.shape[0] * scale)
+print(scale)
+whole = cv2.resize(src=whole, dsize=(width, height))
+print(whole.shape)
+# cv2.imshow("Whole",whole)
+# cv2.waitKey()
+# cv2.imwrite("whole-1.jpg",whole)
