@@ -9,11 +9,11 @@ def get_xy(event, x, y, flags, param):
         param.append(x)
         param.append(y)
 
-song = cv2.imread("mySimpleSong3.jpg")
+song = cv2.imread("mySimpleSong1.jpg")
 cv2.imshow("Song",song)
-loc = []
-cv2.setMouseCallback("Song", get_xy, loc)
-cv2.waitKey()
+# loc = []
+# cv2.setMouseCallback("Song", get_xy, loc)
+# cv2.waitKey()
 
 def symbols():
     # flat is ~ 19 pixels high
@@ -100,7 +100,7 @@ height = round(eighthtail.shape[0] * scale)
 print(scale)
 eighthtail = cv2.resize(src=eighthtail, dsize=(width, height))
 print(eighthtail.shape)
-cv2.imshow("Eighth Note Tail",eighthtail)
+# cv2.imshow("Eighth Note Tail",eighthtail)
 # cv2.imwrite("eighthtail-1.jpg",eighthtail)
 
 #eighthtail2 is 43 pixels tall
@@ -111,8 +111,8 @@ height = round(eighthtail2.shape[0] * scale)
 print(scale)
 eighthtail2 = cv2.resize(src=eighthtail2, dsize=(width, height))
 print(eighthtail2.shape)
-cv2.imshow("Eighth Note Tail 2",eighthtail2)
-cv2.waitKey()
+# cv2.imshow("Eighth Note Tail 2",eighthtail2)
+# cv2.waitKey()
 # cv2.imwrite("eighthtail2-1.jpg",eighthtail2)
 
 #quarter note is 70 pixels tall
@@ -158,11 +158,11 @@ half2 = cv2.resize(src=half2, dsize=(width, height))
 print(half2.shape)
 # cv2.imshow("Half Note 2",half2)
 # cv2.waitKey()
-# cv2.imwrite("half-2.jpg",half2)
+# cv2.imwrite("half2-1.jpg",half2)
 
 #whole note is 20 pixels tall
 whole = cv2.imread("whole.jpg")
-scale = 28/whole.shape[0]
+scale = 18/whole.shape[0]
 width = round(whole.shape[1] * scale)
 height = round(whole.shape[0] * scale)
 print(scale)

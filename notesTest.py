@@ -83,7 +83,7 @@ def findBestMatch(note):
     note = cv2.morphologyEx(note, cv2.MORPH_OPEN, kernel)
     note = cv2.morphologyEx(note, cv2.MORPH_CLOSE, kernel)
 
-    cv2.imshow("Note",note)
+    # cv2.imshow("Note",note)
     #cv2.waitKey()
 
     # black = cv2.connectedComponents(note)
@@ -120,15 +120,18 @@ def findBestMatch(note):
     #
     #
     if len(white_blobs) != 0:
-        hits[0] = np.amax(cv2.matchTemplate(note, eighth1, cv2.TM_CCOEFF_NORMED))
-        hits[1] = np.amax(cv2.matchTemplate(note, eighth2, cv2.TM_CCOEFF_NORMED))
-        hits[2] = np.amax(cv2.matchTemplate(note, quarter1, cv2.TM_CCOEFF_NORMED))
-        hits[3] = np.amax(cv2.matchTemplate(note, quarter2, cv2.TM_CCOEFF_NORMED))
-
+        if(note.shape[1]>=eighth1.shape[1] and note.shape[0]>=eighth1.shape[0]):
+            hits[0] = np.amax(cv2.matchTemplate(note, eighth1, cv2.TM_CCOEFF_NORMED))
+            hits[1] = np.amax(cv2.matchTemplate(note, eighth2, cv2.TM_CCOEFF_NORMED))
+        if (note.shape[1] >= quarter1.shape[1] and note.shape[0] >= quarter1.shape[0]):
+            hits[2] = np.amax(cv2.matchTemplate(note, quarter1, cv2.TM_CCOEFF_NORMED))
+            hits[3] = np.amax(cv2.matchTemplate(note, quarter2, cv2.TM_CCOEFF_NORMED))
     else:
-        hits[4] = np.amax(cv2.matchTemplate(note, half1, cv2.TM_CCOEFF_NORMED))
-        hits[5] = np.amax(cv2.matchTemplate(note, half2, cv2.TM_CCOEFF_NORMED))
-        hits[6] = np.amax(cv2.matchTemplate(note, whole, cv2.TM_CCOEFF_NORMED))
+        if(note.shape[1]>=half1.shape[1] and note.shape[0]>=half1.shape[0]):
+            hits[4] = np.amax(cv2.matchTemplate(note, half1, cv2.TM_CCOEFF_NORMED))
+            hits[5] = np.amax(cv2.matchTemplate(note, half2, cv2.TM_CCOEFF_NORMED))
+        if (note.shape[1] >= whole.shape[1] and note.shape[0] >= whole.shape[0]):
+            hits[6] = np.amax(cv2.matchTemplate(note, whole, cv2.TM_CCOEFF_NORMED))
 
     #
     #print(hits)
@@ -157,13 +160,14 @@ def findBestMatch(note):
 
 def notesTest(img_name):
     img = cv2.imread(img_name)
-
     imgGr = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     image_width = img.shape[1]
     image_height = img.shape[0]
 
+    # cv2.imshow("Gray Image",imgGr)
     _,imgGr = cv2.threshold(imgGr,200,255,cv2.THRESH_BINARY_INV)
 
+    # cv2.imshow("Thresh Image",imgGr)
     lineOut, lineLocs = lineout(imgGr)
 
     #indx = calcStaffInd(lineLocs)
@@ -208,7 +212,7 @@ def notesTest(img_name):
     for i, o in enumerate(objects):
         cv2.rectangle(object_img, (o[0], o[1]), (o[2], o[3]), (255,0,0))
         cv2.imshow("Black Connected Components",object_img)
-    #cv2.waitKey()
+    # cv2.waitKey()
 
     o = objects[0]
     if isTimeSig(np.copy(imgGr[o[1]:o[3], o[0]-5:o[2]+5])):
@@ -222,8 +226,8 @@ def notesTest(img_name):
     print(scale)
     #print(objects)
     for i, o  in enumerate(objects):
-        note = np.copy(imgGr[max(o[5]-40,0):min(o[5]+40,image_height),max(o[4]-22,0):min(o[4]+22,image_width)])
-        #note = np.copy(img[o[1]:o[3], o[0]-5:o[2]+5])
+        #note = np.copy(imgGr[max(o[5]-40,0):min(o[5]+40,image_height),max(o[4]-22,0):min(o[4]+22,image_width)])
+        note = np.copy(imgGr[o[1]-7:o[3]+7, o[0]-7:o[2]+7])
         type, stemDir = findBestMatch(note)
         if stemDir:
             note_positions.append(o[1]+8) #note center is top + 8 pixels
@@ -232,15 +236,15 @@ def notesTest(img_name):
         song_durations.append(pow(2,-(4-type)))
         #print(noteNames[type],stemDir,song_durations[-1])
         cv2.rectangle(img, (o[0], o[1]), (o[2], o[3]), colors[type])
-        cv2.imshow("Black Connected Components",img)
+        cv2.imshow("Note Types",img)
         #cv2.waitKey()
     print(song_durations)
     print(note_positions)
     cv2.waitKey()
 
 
-eighth1 = cv2.imread("eighthtail-1.jpg")
-eighth2 = cv2.imread("eighthtail2-1.jpg")
+eighth1 = cv2.imread("eighth-1.jpg")
+eighth2 = cv2.imread("eighth2-1.jpg")
 quarter1 = cv2.imread("quarter-1.jpg")
 quarter2 = cv2.imread("quarter2-1.jpg")
 half1 = cv2.imread("half-1.jpg")
@@ -254,6 +258,15 @@ quarter2 = createThreshTemp(quarter2, True)
 half1 = createThreshTemp(half1, True)
 half2 = createThreshTemp(half2, True)
 whole = createThreshTemp(whole, True)
+cv2.imshow("Eighth1",eighth1)
+cv2.imshow("eighth2",eighth2)
+cv2.imshow("quarter1",quarter1)
+cv2.imshow("quarter2",quarter2)
+cv2.imshow("half1",half1)
+cv2.imshow("half2",half2)
+cv2.imshow("whole",whole)
+cv2.waitKey()
+cv2.destroyAllWindows()
 durations = [0.125,0.25,0.5,1]
 colors = [(255, 0, 255), (255, 0, 0), (0, 255, 0), (0, 255, 255),(255,255,0)]
 noteNames = ["Unknown","1/8","1/4","1/2","1"]
