@@ -26,14 +26,6 @@ def calcStaffInd(lineLocs):
         indx[2*i] = abs(indx[2*i+1]  + indx[2*i-1])//2
     indx[0] = indx[1] + (indx[1]-indx[2]) - 3
     indx[10] = indx[9] - (indx[8] - indx[9])
-    #diffs = lineLocs[1:5] - lineLocs[0:4]
-    #ist = np.mean(diffs)
-
-    # lineInc = np.arrange(1,11,2)
-    # spaces = np.arrange(0,12,2)
-    # indx[np.arrange(1,12,2)] = lineLocs
-    # indx[np.arrange(0,11,2)] = lineLocs - dist
-    # indx[-1] = lineLocs[-1]+dist
     return indx
 
 def isTimeSig(img):
@@ -96,42 +88,18 @@ def findBestMatch(note):
     note = cv2.morphologyEx(note, cv2.MORPH_OPEN, kernel)
     note = cv2.morphologyEx(note, cv2.MORPH_CLOSE, kernel)
 
-    # cv2.imshow("Note",note)
-    #cv2.waitKey()
-
-    # black = cv2.connectedComponents(note)
-    # cv2.imshow("Connected Components", black)
-    # circles = cv2.HoughCircles(note, cv2.HOUGH_GRADIENT, 1, 2,
-    #                           param1=50, param2=3,
-    #                           minRadius=10, maxRadius=20)
-    #
-    # if circles is not None:
-    #     circles = np.uint16(np.around(circles))
-    #     for i in circles[0, :]:
-    #         center = (i[0], i[1])
-    #         # circle center
-    #         cv2.circle(note, center, 1, (0, 100, 100), 3)
-    #         # circle outline
-    #         radius = i[2]
-    #         cv2.circle(note, center, radius, (255, 0, 255), 3)
-    #
-    # cv2.imshow("detected circles", note)
-    # cv2.waitKey()
-
     params = cv2.SimpleBlobDetector_Params()
     params.filterByColor = True
     params.blobColor = 0
-    blackBlobDetector = cv2.SimpleBlobDetector_create(params)
     params.blobColor = 255
     whiteBlobDetector = cv2.SimpleBlobDetector_create(params)
 
     white_blobs = whiteBlobDetector.detect(note)
-    im_with_keypoints = cv2.drawKeypoints(note, white_blobs, np.array([]), (0, 0, 255),
-                                          cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+    # im_with_keypoints = cv2.drawKeypoints(note, white_blobs, np.array([]), (0, 0, 255),
+    #                                       cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
     # cv2.imshow("Keypoints", im_with_keypoints)
     # cv2.waitKey(30)
-    #
-    #
+
     if len(white_blobs) != 0:
         if(note.shape[1]>=eighth1.shape[1] and note.shape[0]>=eighth1.shape[0]):
             hits[0] = np.amax(cv2.matchTemplate(note, eighth1, cv2.TM_CCOEFF_NORMED))
@@ -377,7 +345,7 @@ noteNames = ["Unknown","1/8","1/4","1/2","1"]
 if __name__ == '__main__':
     for i in range(1,4):
         name = 'mySimpleSong' + str(i) + '.jpg'
-        img, durations, notes =notesTest(name)
-        name2 = 'mySimgpleSong' + str(i) + '-solved.jpg'
+        img, durations, notes = notesTest(name)
+        name2 = 'mySimpleSong' + str(i) + '-solved.jpg'
         cv2.imwrite(name2,img)
         playCalced(durations,notes)
