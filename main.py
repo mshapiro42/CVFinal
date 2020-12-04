@@ -17,6 +17,16 @@ def playHardCoded():
     for i in range(len(notes)):
         player.play_note(notes[i], spb * durations[i])
 
+
+def playCalced(durations,notes):
+    player = musicalbeeps.Player(volume=0.3,
+                                 mute_output=False)
+    # Examples:
+    tempo = 60 # beats per minute
+    spb = 60/tempo # seconds per beat
+    for i in range(len(notes)):
+        player.play_note(notes[i], spb * durations[i])
+
 def createTemplate():
     bgr = cv2.imread('mySimpleSong1.jpg')
     gray_img = cv2.cvtColor(bgr,cv2.COLOR_BGR2GRAY)
