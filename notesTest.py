@@ -17,9 +17,17 @@ def createThreshTemp(img, inv):
 
 def calcStaffInd(lineLocs):
     lineLocs = np.array(lineLocs)
-    diffs = lineLocs[1:5] - lineLocs[0:4]
-    dist = np.mean(diffs)
     indx = np.zeros(11)
+
+    for i in range(5):
+        indx[1+2*i] = lineLocs[4-i]
+    for i in range(1,5):
+        indx[2*i] = abs(indx[2*i+1]  + indx[2*i-1])//2
+    indx[0] = indx[1] + (indx[1]-indx[2])
+    indx[10] = indx[9] - (indx[8] - indx[9])
+    #diffs = lineLocs[1:5] - lineLocs[0:4]
+    #ist = np.mean(diffs)
+
     # lineInc = np.arrange(1,11,2)
     # spaces = np.arrange(0,12,2)
     # indx[np.arrange(1,12,2)] = lineLocs
@@ -166,7 +174,7 @@ def notesTest(img_name):
 
     lineOut, lineLocs = lineout(imgGr)
 
-    #indx = calcStaffInd(lineLocs)
+    indx = calcStaffInd(lineLocs)
 
     clef = clefFind(imgGr)
 
