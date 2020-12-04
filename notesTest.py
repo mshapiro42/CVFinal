@@ -14,6 +14,14 @@ def createThreshTemp(img, inv):
     return img
 
 
+def calcStaffInd(lineLocs):
+    diffs = lineLocs[1:5] - lineLocs[0:4]
+    dist = np.mean(lineLocs)
+    indx = np.zeros((11))
+    indx[1:2:-1] = lineLocs
+    indx[0:2:-1] = lineLocs - dist
+    indx[-1] = lineLocs[-1]+dist
+
 def isTimeSig(img):
     fourfour = cv2.imread("fourfour.jpg")
     fourfour = createThreshTemp(fourfour,True)
@@ -118,7 +126,7 @@ def findBestMatch(note):
         hits[6] = np.amax(cv2.matchTemplate(note, whole, cv2.TM_CCOEFF_NORMED))
 
     #
-    print(hits)
+    #print(hits)
     if (hits[0] > n or hits[1] > n):
         hits[2:4] = 0
     if (hits[4]>l or hits[5]>l) and hits[6]<.7:
@@ -153,6 +161,7 @@ def notesTest(img_name):
 
     lineOut, lineLocs = lineout(imgGr)
 
+
     clef = clefFind(imgGr)
 
     print(clef)
@@ -165,6 +174,7 @@ def notesTest(img_name):
     # cv2.imshow('morphed',lineOut)
     # cv2.waitKey()
     song_durations = []
+    note_positions = []
     _, notes = cv2.threshold(lineOut,200,255,cv2.THRESH_BINARY_INV)
     # cv2.imshow('Inv', notes)
     # cv2.waitKey()
@@ -207,10 +217,17 @@ def notesTest(img_name):
         note = np.copy(imgGr[max(o[5]-40,0):min(o[5]+40,image_height),max(o[4]-22,0):min(o[4]+22,image_width)])
         #note = np.copy(img[o[1]:o[3], o[0]-5:o[2]+5])
         type, stemDir = findBestMatch(note)
-        print(noteNames[type],stemDir)
+        if stemDir:
+            note_positions.append(o[1]+8) #note center is top + 8 pixels
+        else:
+            note_positions.append(o[3]-8) # note center is bottom - 8 pixels
+        song_durations.append(pow(2,-(4-type)))
+        #print(noteNames[type],stemDir,song_durations[-1])
         cv2.rectangle(img, (o[0], o[1]), (o[2], o[3]), colors[type])
         cv2.imshow("Black Connected Components",img)
         cv2.waitKey()
+    print(song_durations)
+    print(note_positions)
     #cv2.waitKey()
 
 
@@ -229,8 +246,7 @@ quarter2 = createThreshTemp(quarter2, True)
 half1 = createThreshTemp(half1, True)
 half2 = createThreshTemp(half2, True)
 whole = createThreshTemp(whole, True)
-
-duration = np.array([.125, .125, .25, .25, .5, .5, 1])
+durations = [0.125,0.25,0.5,1]
 colors = [(255, 0, 255), (255, 0, 0), (0, 255, 0), (0, 255, 255),(255,255,0)]
 noteNames = ["Unknown","1/8","1/4","1/2","1"]
 
