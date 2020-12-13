@@ -93,7 +93,7 @@ def findBestMatch(note):
     ksize = 2
     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (ksize, ksize))
     note = cv2.morphologyEx(note, cv2.MORPH_OPEN, kernel)
-    # note = cv2.morphologyEx(note, cv2.MORPH_CLOSE, kernel)
+    note = cv2.morphologyEx(note, cv2.MORPH_CLOSE, kernel)
 
     params = cv2.SimpleBlobDetector_Params()
     params.filterByColor = True
@@ -214,7 +214,7 @@ def notesTest(img_name):
     # cv2.imshow("Gray Image",imgGr)
     _, imgGr = cv2.threshold(imgGr, 200, 255, cv2.THRESH_BINARY_INV)
 
-    cv2.imshow("Thresh Image",imgGr)
+    # cv2.imshow("Thresh Image",imgGr)
     lineOut, lineLocs = lineout(imgGr)
 
     indx = calcStaffInd(lineLocs)
@@ -222,7 +222,7 @@ def notesTest(img_name):
     cv2.putText(img, clef, (10, 20), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 0))
     print(clef)
     # print(indx)
-    ksize = 5
+    ksize = 6
     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (ksize, ksize))
     lineOut = cv2.morphologyEx(lineOut, cv2.MORPH_CLOSE, kernel)
     # lineOut = cv2.morphologyEx(lineOut,cv2.MORPH_OPEN,kernel)
@@ -232,8 +232,8 @@ def notesTest(img_name):
     song_durations = []
     note_positions = []
     _, notes = cv2.threshold(lineOut, 200, 255, cv2.THRESH_BINARY_INV)
-    cv2.imshow('Inv', notes)
-    cv2.waitKey()
+    # cv2.imshow('Inv', notes)
+    # cv2.waitKey()
 
     num_labels_black, labels_img_black, stats_black, centroids_black = cv2.connectedComponentsWithStats(
         cv2.bitwise_not(notes))
@@ -248,7 +248,7 @@ def notesTest(img_name):
         y0 = stat[cv2.CC_STAT_TOP]
         x1 = x0 + stat[cv2.CC_STAT_WIDTH]
         y1 = y0 + stat[cv2.CC_STAT_HEIGHT]
-        if (min(lineLocs) - y0 < staff_tol) and (y1 - max(lineLocs) < staff_tol) and stat[cv2.CC_STAT_WIDTH] > 5:
+        if (min(lineLocs) - y0 < staff_tol) and (y1 - max(lineLocs) < staff_tol) and stat[cv2.CC_STAT_WIDTH] > 4:
             # match = findBestMatch(notes[y0:y1,x0:x1])
             # print(match)
             objects.append([x0, y0, x1, y1, round(centroids_black[i, 0]), round(centroids_black[i, 1])])
@@ -355,6 +355,6 @@ if __name__ == '__main__':
     # for i in range(4,7):
         name = 'mySimpleSong' + str(i) + '.jpg'
         img, durations, notes = notesTest(name)
-        name2 = 'mySimpleSong' + str(i) + '-5-solved.jpg'
+        name2 = 'mySimpleSong' + str(i) + '-6-solved.jpg'
         cv2.imwrite(name2, img)
         playCalced(durations, notes)
