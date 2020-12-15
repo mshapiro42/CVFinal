@@ -9,7 +9,7 @@ def get_xy(event, x, y, flags, param):
         param.append(x)
         param.append(y)
 
-song = cv2.imread("mySimpleSong3.jpg")
+song = cv2.imread("Images/mySimpleSong3.jpg")
 cv2.imshow("Song",song)
 # loc = []
 # cv2.setMouseCallback("Song", get_xy, loc)
@@ -17,7 +17,7 @@ cv2.imshow("Song",song)
 
 def symbols():
     # flat is ~ 43 pixels high
-    flat = cv2.imread("flat.jpg")
+    flat = cv2.imread("Images/flat.jpg")
     #flat = cv2.cvtColor(flat,cv2.COLOR_BGR2GRAY)
     scale = 43/flat.shape[0]
     width = round(flat.shape[1]* scale)
@@ -30,7 +30,7 @@ def symbols():
     #cv2.imwrite("flat.jpg",flat)
 
     # sharp is ~ 46 pixels high
-    sharp = cv2.imread("sharp.jpg")
+    sharp = cv2.imread("Images/sharp.jpg")
     #flat = cv2.cvtColor(flat,cv2.COLOR_BGR2GRAY)
     scale = 46/sharp.shape[0]
     width = round(sharp.shape[1]* scale)
@@ -43,7 +43,7 @@ def symbols():
     # cv2.imwrite("sharp.jpg",sharp)
 
     # natural is ~ 43 pixels high
-    natural = cv2.imread("natural.jpg")
+    natural = cv2.imread("Images/natural.jpg")
     #flat = cv2.cvtColor(flat,cv2.COLOR_BGR2GRAY)
     scale = 43/natural.shape[0]
     width = round(natural.shape[1]* scale)
@@ -53,10 +53,10 @@ def symbols():
     print(natural.shape)
     cv2.imshow("Natural",natural)
     cv2.waitKey()
-    cv2.imwrite("natural.jpg",natural)
+    cv2.imwrite("Images/natural.jpg", natural)
 
     # fourfour is ~ 48 pixels high
-    fourfour = cv2.imread("fourfour.jpg")
+    fourfour = cv2.imread("Images/fourfour.jpg")
     #flat = cv2.cvtColor(flat,cv2.COLOR_BGR2GRAY)
     scale = 48/fourfour.shape[0]
     width = round(fourfour.shape[1]* scale)
@@ -70,7 +70,7 @@ def symbols():
 
 def notes():
     #eighth note is 70 pixels tall
-    eighth = cv2.imread("eighth-1.jpg")
+    eighth = cv2.imread("Images/eighth-1.jpg")
     scale = 60/eighth.shape[0]
     width = round(eighth.shape[1] * scale)
     height = round(eighth.shape[0] * scale)
@@ -82,7 +82,7 @@ def notes():
     # cv2.imwrite("eighth-1.jpg",eighth)
 
     #eighth note is 70 pixels tall
-    eighth2 = cv2.imread("eighth2-1.jpg")
+    eighth2 = cv2.imread("Images/eighth2-1.jpg")
     scale = 60/eighth2.shape[0]
     width = round(eighth2.shape[1] * scale)
     height = round(eighth2.shape[0] * scale)
@@ -94,7 +94,7 @@ def notes():
     # cv2.imwrite("eighth2-1.jpg",eighth2)
 
     #eighthtail is 43 pixels tall
-    eighthtail = cv2.imread("eighthtail.jpg")
+    eighthtail = cv2.imread("Images/eighthtail.jpg")
     scale = 48/eighthtail.shape[0]
     width = round(eighthtail.shape[1] * scale)
     height = round(eighthtail.shape[0] * scale)
@@ -105,7 +105,7 @@ def notes():
     # cv2.imwrite("eighthtail-1.jpg",eighthtail)
 
     #eighthtail2 is 43 pixels tall
-    eighthtail2 = cv2.imread("eighthtail2.jpg")
+    eighthtail2 = cv2.imread("Images/eighthtail2.jpg")
     scale = 43/eighthtail2.shape[0]
     width = round(eighthtail2.shape[1] * scale)
     height = round(eighthtail2.shape[0] * scale)
@@ -117,7 +117,7 @@ def notes():
     # cv2.imwrite("eighthtail2-1.jpg",eighthtail2)
 
     #quarter note is 70 pixels tall
-    quarter = cv2.imread("quarter-1.jpg")
+    quarter = cv2.imread("Images/quarter-1.jpg")
     scale = 60/quarter.shape[0]
     width = round(quarter.shape[1] * scale)
     height = round(quarter.shape[0] * scale)
@@ -128,7 +128,7 @@ def notes():
     # cv2.imwrite("quarter-1.jpg",quarter)
 
     #quarter note is 70 pixels tall
-    quarter2 = cv2.imread("quarter2-1.jpg")
+    quarter2 = cv2.imread("Images/quarter2-1.jpg")
     scale = 60/quarter2.shape[0]
     width = round(quarter2.shape[1] * scale)
     height = round(quarter2.shape[0] * scale)
@@ -139,7 +139,7 @@ def notes():
     # cv2.imwrite("quarter2-1.jpg",quarter2)
 
     #half note is 70 pixels tall
-    half = cv2.imread("half-1.jpg")
+    half = cv2.imread("Images/half-1.jpg")
     scale = 60/half.shape[0]
     width = round(half.shape[1] * scale)
     height = round(half.shape[0] * scale)
@@ -150,7 +150,7 @@ def notes():
     # cv2.imwrite("half-1.jpg",half)
 
     #half note is 70 pixels tall
-    half2 = cv2.imread("half2-1.jpg")
+    half2 = cv2.imread("Images/half2-1.jpg")
     scale = 60/half2.shape[0]
     width = round(half2.shape[1] * scale)
     height = round(half2.shape[0] * scale)
@@ -162,7 +162,7 @@ def notes():
     # cv2.imwrite("half2-1.jpg",half2)
 
     #whole note is 20 pixels tall
-    whole = cv2.imread("whole.jpg")
+    whole = cv2.imread("Images/whole.jpg")
     scale = 18/whole.shape[0]
     width = round(whole.shape[1] * scale)
     height = round(whole.shape[0] * scale)
